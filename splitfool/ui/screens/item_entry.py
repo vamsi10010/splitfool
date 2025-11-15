@@ -79,14 +79,16 @@ class ItemEntryScreen(ModalScreen[ItemData | None]):
     }
     """
 
-    def __init__(self, users: list[User]) -> None:
+    def __init__(self, users: list[User], existing_item: ItemData | None = None) -> None:
         """Initialize item entry screen.
 
         Args:
             users: List of available users
+            existing_item: Optional existing item data for editing
         """
         super().__init__()
         self.users = users
+        self.existing_item = existing_item
         self.user_checkboxes: dict[int, Checkbox] = {}
         self.fraction_inputs: dict[int, Input] = {}
 
@@ -97,13 +99,24 @@ class ItemEntryScreen(ModalScreen[ItemData | None]):
             Widgets for the dialog
         """
         with Container(id="dialog"):
-            yield Static("Add Item", id="title")
+            title_text = "Edit Item" if self.existing_item else "Add Item"
+            yield Static(title_text, id="title")
 
             yield Label("Description:")
-            yield Input(placeholder="e.g., Pizza", id="item-description")
+            description_value = self.existing_item.description if self.existing_item else ""
+            yield Input(
+                placeholder="e.g., Pizza", 
+                id="item-description",
+                value=description_value
+            )
 
             yield Label("Cost:")
-            yield Input(placeholder="0.00", id="item-cost")
+            cost_value = str(self.existing_item.cost) if self.existing_item else ""
+            yield Input(
+                placeholder="0.00", 
+                id="item-cost",
+                value=cost_value
+            )
 
             yield Label("Assign to users:")
             yield Static(
@@ -112,19 +125,43 @@ class ItemEntryScreen(ModalScreen[ItemData | None]):
             )
 
             # User assignment section
+            # Build existing assignments map for pre-filling
+            existing_assignments: dict[int, Decimal] = {}
+            if self.existing_item:
+                existing_assignments = {
+                    user_id: fraction 
+                    for user_id, fraction in self.existing_item.assignments
+                }
+            
             with Vertical(id="users-section"):
                 for user in self.users:
+                    user_id_typed = user.id
+                    assert user_id_typed is not None, "User ID must not be None"
+                    
                     with Horizontal(classes="user-row"):
-                        checkbox = Checkbox(user.name, id=f"user-{user.id}")
-                        self.user_checkboxes[user.id] = checkbox  # type: ignore
+                        # Pre-check if user was assigned to this item
+                        is_assigned = user_id_typed in existing_assignments
+                        checkbox = Checkbox(
+                            user.name, 
+                            id=f"user-{user_id_typed}",
+                            value=is_assigned
+                        )
+                        self.user_checkboxes[user_id_typed] = checkbox
                         yield checkbox
 
+                        # Pre-fill fraction if user was assigned
+                        fraction_value = ""
+                        if user_id_typed in existing_assignments:
+                            fraction_value = str(existing_assignments[user_id_typed])
+                        
                         fraction_input = Input(
                             placeholder="auto",
-                            id=f"fraction-{user.id}",
+                            id=f"fraction-{user_id_typed}",
                             classes="fraction-input",
+                            value=fraction_value,
+                            disabled=not is_assigned
                         )
-                        self.fraction_inputs[user.id] = fraction_input  # type: ignore
+                        self.fraction_inputs[user_id_typed] = fraction_input
                         yield fraction_input
 
             yield Static("", id="error-message", classes="error")

@@ -82,6 +82,22 @@ class BillEntryScreen(Screen[bool]):
         align: center middle;
     }
     
+    .item-button-row {
+        width: 100%;
+        height: auto;
+        margin-bottom: 1;
+    }
+    
+    .item-display-btn {
+        width: 1fr;
+        text-align: left;
+    }
+    
+    .item-action-btn {
+        width: auto;
+        min-width: 10;
+    }
+    
     .error {
         color: $error;
         text-style: bold;
@@ -159,7 +175,7 @@ class BillEntryScreen(Screen[bool]):
         Args:
             event: Button pressed event
         """
-        button_id = event.button.id
+        button_id = str(event.button.id)
 
         if button_id == "add-item-btn":
             self.action_add_item()
@@ -167,6 +183,14 @@ class BillEntryScreen(Screen[bool]):
             await self.action_save()
         elif button_id == "cancel-btn":
             await self.action_cancel()
+        elif button_id.startswith("edit-"):
+            # Extract item index and edit
+            index = int(button_id.replace("edit-", ""))
+            self.action_edit_item(index)
+        elif button_id.startswith("delete-"):
+            # Extract item index and delete
+            index = int(button_id.replace("delete-", ""))
+            await self.action_delete_item(index)
 
     def action_add_item(self) -> None:
         """Open item entry dialog."""
@@ -180,6 +204,40 @@ class BillEntryScreen(Screen[bool]):
                 self.call_later(self.update_preview)
 
         self.app.push_screen(ItemEntryScreen(self.users), handle_item_result)
+
+    def action_edit_item(self, index: int) -> None:
+        """Edit an existing item.
+        
+        Args:
+            index: Index of item to edit
+        """
+        from splitfool.ui.screens.item_entry import ItemEntryScreen
+
+        if 0 <= index < len(self.items):
+            existing_item = self.items[index]
+            
+            def handle_edit_result(item_data: ItemData | None) -> None:
+                """Handle result from item edit screen."""
+                if item_data:
+                    self.items[index] = item_data
+                    self.call_later(self.update_items_display)
+                    self.call_later(self.update_preview)
+
+            self.app.push_screen(
+                ItemEntryScreen(self.users, existing_item=existing_item),
+                handle_edit_result
+            )
+
+    async def action_delete_item(self, index: int) -> None:
+        """Delete an item.
+        
+        Args:
+            index: Index of item to delete
+        """
+        if 0 <= index < len(self.items):
+            self.items.pop(index)
+            await self.update_items_display()
+            await self.update_preview()
 
     async def action_preview(self) -> None:
         """Update preview display."""
@@ -258,21 +316,42 @@ class BillEntryScreen(Screen[bool]):
 
     async def update_items_display(self) -> None:
         """Update the items list display."""
-        items_list = self.query_one("#items-list", Static)
+        items_container = self.query_one("#items-section", Container)
+        
+        # Remove old items display
+        try:
+            old_list = items_container.query_one("#items-list")
+            await old_list.remove()
+        except Exception:
+            pass
+        
+        # Remove old item buttons
+        for widget in items_container.query(".item-button-row"):
+            await widget.remove()
 
         if not self.items:
-            items_list.update("No items added yet.")
+            static = Static("No items added yet.", id="items-list")
+            await items_container.mount(static, before="#add-item-btn")
             return
 
-        lines = []
-        for i, item in enumerate(self.items, 1):
+        # Create clickable item list
+        for i, item in enumerate(self.items):
             user_count = len(item.assignments)
-            lines.append(
-                f"{i}. {item.description} - ${item.cost:.2f} "
+            item_text = (
+                f"{i+1}. {item.description} - ${item.cost:.2f} "
                 f"(split {user_count} way{'s' if user_count != 1 else ''})"
             )
-
-        items_list.update("\n".join(lines))
+            
+            item_btn = Button(
+                item_text, 
+                id=f"item-{i}",
+                classes="item-display-btn"
+            )
+            edit_btn = Button("Edit", id=f"edit-{i}", variant="warning", classes="item-action-btn")
+            delete_btn = Button("Delete", id=f"delete-{i}", variant="error", classes="item-action-btn")
+            
+            item_row = Horizontal(item_btn, edit_btn, delete_btn, classes="item-button-row")
+            await items_container.mount(item_row, before=0)
 
     async def update_preview(self) -> None:
         """Update the preview display."""
