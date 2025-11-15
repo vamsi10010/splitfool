@@ -162,21 +162,24 @@ class BillEntryScreen(Screen[bool]):
         button_id = event.button.id
 
         if button_id == "add-item-btn":
-            await self.action_add_item()
+            self.action_add_item()
         elif button_id == "save-btn":
             await self.action_save()
         elif button_id == "cancel-btn":
             await self.action_cancel()
 
-    async def action_add_item(self) -> None:
+    def action_add_item(self) -> None:
         """Open item entry dialog."""
         from splitfool.ui.screens.item_entry import ItemEntryScreen
 
-        item_data = await self.app.push_screen_wait(ItemEntryScreen(self.users))
-        if item_data:
-            self.items.append(item_data)
-            await self.update_items_display()
-            await self.update_preview()
+        def handle_item_result(item_data: ItemData | None) -> None:
+            """Handle result from item entry screen."""
+            if item_data:
+                self.items.append(item_data)
+                self.call_later(self.update_items_display)
+                self.call_later(self.update_preview)
+
+        self.app.push_screen(ItemEntryScreen(self.users), handle_item_result)
 
     async def action_preview(self) -> None:
         """Update preview display."""
