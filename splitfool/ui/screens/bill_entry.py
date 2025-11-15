@@ -318,23 +318,32 @@ class BillEntryScreen(Screen[bool]):
         """Update the items list display."""
         items_container = self.query_one("#items-section", Container)
         
-        # Remove old items display
+        # Remove old items display (but keep the section title and add button)
         try:
             old_list = items_container.query_one("#items-list")
             await old_list.remove()
         except Exception:
             pass
         
-        # Remove old item buttons
+        # Remove old item button rows
         for widget in items_container.query(".item-button-row"):
             await widget.remove()
 
-        if not self.items:
-            static = Static("No items added yet.", id="items-list")
-            await items_container.mount(static, before="#add-item-btn")
+        # Find the add button container to use as reference
+        try:
+            add_button_row = items_container.query_one(".button-row")
+        except Exception:
+            # If button row doesn't exist for some reason, we have a problem
+            # This shouldn't happen, but let's handle it gracefully
             return
 
-        # Create clickable item list
+        if not self.items:
+            # Show "no items" message before the add button
+            static = Static("No items added yet.", id="items-list")
+            await items_container.mount(static, before=add_button_row)
+            return
+
+        # Create clickable item list - mount each row before the add button
         for i, item in enumerate(self.items):
             user_count = len(item.assignments)
             item_text = (
@@ -351,7 +360,7 @@ class BillEntryScreen(Screen[bool]):
             delete_btn = Button("Delete", id=f"delete-{i}", variant="error", classes="item-action-btn")
             
             item_row = Horizontal(item_btn, edit_btn, delete_btn, classes="item-button-row")
-            await items_container.mount(item_row, before=0)
+            await items_container.mount(item_row, before=add_button_row)
 
     async def update_preview(self) -> None:
         """Update the preview display."""
