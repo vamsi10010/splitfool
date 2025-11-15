@@ -108,8 +108,12 @@ class HomeScreen(Screen[None]):
 
     def action_view_balances(self) -> None:
         """Navigate to balance view screen."""
-        self.app.notify("Balance view not yet implemented")
+        from splitfool.ui.screens.balance_view import BalanceViewScreen
+        
+        self.app.push_screen(BalanceViewScreen())
 
     def action_view_history(self) -> None:
         """Navigate to history screen."""
-        self.app.notify("History view not yet implemented")
+        from splitfool.ui.screens.history import HistoryScreen
+        
+        self.app.push_screen(HistoryScreen())

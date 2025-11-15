@@ -342,3 +342,19 @@ class BillService:
             payer_name=payer_name,
             calculated_shares=calculated_shares,
         )
+
+    def get_all_bills(self, limit: int = 100, offset: int = 0) -> list[Bill]:
+        """Get all bills with pagination.
+
+        Args:
+            limit: Maximum number of bills to return
+            offset: Number of bills to skip
+
+        Returns:
+            List of bills ordered by created_at DESC (most recent first)
+        """
+        all_bills = self.bill_repo.get_all()
+        # Sort by creation date, most recent first
+        sorted_bills = sorted(all_bills, key=lambda b: b.created_at, reverse=True)
+        # Apply pagination
+        return sorted_bills[offset : offset + limit]

@@ -205,9 +205,9 @@ After MVP, each user story phase can be delivered independently:
 
 #### Validation & Error Handling
 
-- [ ] T069 [US2] Implement comprehensive input validation for bill entry (positive costs, valid fractions, non-empty descriptions)
-- [ ] T070 [US2] Implement error display widgets for validation failures (clear, actionable messages with error codes)
-- [ ] T071 [US2] Handle edge case: attempt to create bill when no users exist (display helpful error)
+- [x] T069 [US2] Implement comprehensive input validation for bill entry (positive costs, valid fractions, non-empty descriptions)
+- [x] T070 [US2] Implement error display widgets for validation failures (clear, actionable messages with error codes)
+- [x] T071 [US2] Handle edge case: attempt to create bill when no users exist (display helpful error)
 
 #### Integration & Testing
 
@@ -247,22 +247,22 @@ After MVP, each user story phase can be delivered independently:
 
 #### Service Layer - Balance Calculation
 
-- [ ] T077 [US3] Implement BalanceService.get_all_balances() in splitfool/services/balance_service.py (calculates net balances from all bills since last settlement)
-- [ ] T078 [US3] Implement balance calculation algorithm (aggregate debts, net out mutual debts, return only positive balances)
-- [ ] T079 [US3] Implement BalanceService.get_user_balances() (returns debts and credits for specific user)
-- [ ] T080 [US3] Implement BalanceService.user_has_outstanding_balances() (used by user deletion check)
-- [ ] T081 [US3] Implement BalanceService.preview_settlement() (shows current balances that would be cleared)
-- [ ] T082 [US3] Implement BalanceService.settle_all_balances() (creates settlement record with timestamp and optional note)
-- [ ] T083 [US3] Implement BalanceService.get_last_settlement() (retrieves most recent settlement for balance calculation cutoff)
+- [x] T077 [US3] Implement BalanceService.get_all_balances() in splitfool/services/balance_service.py (calculates net balances from all bills since last settlement)
+- [x] T078 [US3] Implement balance calculation algorithm (aggregate debts, net out mutual debts, return only positive balances)
+- [x] T079 [US3] Implement BalanceService.get_user_balances() (returns debts and credits for specific user)
+- [x] T080 [US3] Implement BalanceService.user_has_outstanding_balances() (used by user deletion check)
+- [x] T081 [US3] Implement BalanceService.preview_settlement() (shows current balances that would be cleared)
+- [x] T082 [US3] Implement BalanceService.settle_all_balances() (creates settlement record with timestamp and optional note)
+- [x] T083 [US3] Implement BalanceService.get_last_settlement() (retrieves most recent settlement for balance calculation cutoff)
 
 #### TUI Components - Balance Viewing
 
-- [ ] T084 [US3] Implement BalanceViewScreen in splitfool/ui/screens/balance_view.py (displays net balances, settlement button)
-- [ ] T085 [US3] Implement BalanceTable widget in splitfool/ui/widgets/balance_table.py (displays "X owes Y: $Z" for all non-zero balances)
-- [ ] T086 [US3] Implement settlement confirmation dialog (shows all current balances with "Are you sure?" confirmation)
-- [ ] T087 [US3] Implement settlement success notification (confirms all balances cleared)
-- [ ] T088 [US3] Add "View Balances" option to HomeScreen with keyboard shortcut (Ctrl+V)
-- [ ] T089 [US3] Handle edge case: display "All balances settled" when no outstanding debts exist
+- [x] T084 [US3] Implement BalanceViewScreen in splitfool/ui/screens/balance_view.py (displays net balances, settlement button)
+- [x] T085 [US3] Implement BalanceTable widget in splitfool/ui/widgets/balance_table.py (displays "X owes Y: $Z" for all non-zero balances)
+- [x] T086 [US3] Implement settlement confirmation dialog (shows all current balances with "Are you sure?" confirmation)
+- [x] T087 [US3] Implement settlement success notification (confirms all balances cleared)
+- [x] T088 [US3] Add "View Balances" option to HomeScreen with keyboard shortcut (Ctrl+V)
+- [x] T089 [US3] Handle edge case: display "All balances settled" when no outstanding debts exist
 
 #### Integration & Testing
 
@@ -274,7 +274,7 @@ After MVP, each user story phase can be delivered independently:
 
 #### Update User Deletion Check
 
-- [ ] T095 [US3] Update UserService.delete_user() to call BalanceService.user_has_outstanding_balances() (replace stub from Phase 3)
+- [x] T095 [US3] Update UserService.delete_user() to call BalanceService.user_has_outstanding_balances() (replace stub from Phase 3)
 
 **Acceptance Criteria**:
 1. ✅ User can navigate to balance view screen
@@ -305,17 +305,17 @@ After MVP, each user story phase can be delivered independently:
 
 #### Service Layer - History
 
-- [ ] T096 [US4] Implement BillService.get_all_bills() with pagination (retrieves bills in chronological order, most recent first)
-- [ ] T097 [US4] Implement BillService.get_bill_detail() (retrieves complete bill with items, assignments, payer name, calculated shares)
+- [x] T096 [US4] Implement BillService.get_all_bills() with pagination (retrieves bills in chronological order, most recent first)
+- [x] T097 [US4] Implement BillService.get_bill_detail() (retrieves complete bill with items, assignments, payer name, calculated shares)
 
 #### TUI Components - History
 
-- [ ] T098 [US4] Implement HistoryScreen in splitfool/ui/screens/history.py (lists all bills with summary info)
-- [ ] T099 [US4] Implement BillListWidget (displays bills in chronological order with pagination controls)
-- [ ] T100 [US4] Implement BillDetailWidget (displays complete bill information: items, costs, assignments, fractions, tax, payer, total, calculated shares)
-- [ ] T101 [US4] Implement navigation: select bill → show detail → back to list
-- [ ] T102 [US4] Add "View History" option to HomeScreen with keyboard shortcut (Ctrl+H)
-- [ ] T103 [US4] Handle edge case: display "No bills entered yet" when history is empty
+- [x] T098 [US4] Implement HistoryScreen in splitfool/ui/screens/history.py (lists all bills with summary info)
+- [x] T099 [US4] Implement BillListWidget (displays bills in chronological order with pagination controls)
+- [x] T100 [US4] Implement BillDetailWidget (displays complete bill information: items, costs, assignments, fractions, tax, payer, total, calculated shares)
+- [x] T101 [US4] Implement navigation: select bill → show detail → back to list
+- [x] T102 [US4] Add "View History" option to HomeScreen with keyboard shortcut (Ctrl+H)
+- [x] T103 [US4] Handle edge case: display "No bills entered yet" when history is empty
 
 #### Integration & Testing
 

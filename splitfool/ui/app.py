@@ -8,6 +8,7 @@ from textual.widgets import Footer, Header
 
 from splitfool.config import Config
 from splitfool.db.connection import get_connection, initialize_database
+from splitfool.services.balance_service import BalanceService
 from splitfool.services.bill_service import BillService
 from splitfool.services.user_service import UserService
 from splitfool.ui.screens.home import HomeScreen
@@ -38,6 +39,7 @@ class SplitfoolApp(App[None]):
         self.conn: sqlite3.Connection | None = None
         self.user_service: UserService | None = None
         self.bill_service: BillService | None = None
+        self.balance_service: BalanceService | None = None
 
     def on_mount(self) -> None:
         """Initialize application on mount."""
@@ -50,6 +52,10 @@ class SplitfoolApp(App[None]):
         # Initialize services
         self.user_service = UserService(self.conn)
         self.bill_service = BillService(self.conn)
+        self.balance_service = BalanceService(self.conn)
+        
+        # Wire up balance service to user service
+        self.user_service.set_balance_service(self.balance_service)
         
         # Push home screen
         self.push_screen(HomeScreen())
