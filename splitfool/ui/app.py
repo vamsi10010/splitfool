@@ -21,12 +21,46 @@ class SplitfoolApp(App[None]):
     Screen {
         background: $surface;
     }
+    
+    Header {
+        background: $primary;
+        color: $text;
+        text-style: bold;
+    }
+    
+    Footer {
+        background: $primary-darken-1;
+    }
+    
+    .success {
+        color: $success;
+        text-style: bold;
+    }
+    
+    .error {
+        color: $error;
+        text-style: bold;
+    }
+    
+    .warning {
+        color: $warning;
+        text-style: bold;
+    }
+    
+    .info {
+        color: $accent;
+    }
     """
 
     BINDINGS = [
         ("q", "quit", "Quit"),
         ("?", "help", "Help"),
     ]
+    
+    # App title shown in header
+    TITLE = "🧾 Splitfool v0.1.0"
+    # Subtitle shown in header
+    SUB_TITLE = "Bill Splitting Application"
 
     def __init__(self, config: Config | None = None) -> None:
         """Initialize application.
@@ -71,7 +105,9 @@ class SplitfoolApp(App[None]):
 
     def action_help(self) -> None:
         """Show help screen."""
-        self.notify("Help screen not yet implemented")
+        from splitfool.ui.screens.help import HelpScreen
+        
+        self.push_screen(HelpScreen())
 
     async def on_unmount(self) -> None:
         """Clean up resources on unmount."""

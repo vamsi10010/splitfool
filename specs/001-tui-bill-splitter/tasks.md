@@ -350,33 +350,33 @@ After MVP, each user story phase can be delivered independently:
 
 #### Help System
 
-- [ ] T107 [US5] Implement HelpScreen in splitfool/ui/screens/help.py (comprehensive help content with sections for each feature)
-- [ ] T108 [US5] Document all keyboard shortcuts in help screen (Ctrl+N, Ctrl+B, Ctrl+V, Ctrl+H, F1/?, Esc, Enter, Tab, Arrow keys)
-- [ ] T109 [US5] Document all features with usage instructions (user management, bill entry, balances, history)
-- [ ] T110 [US5] Implement context-sensitive help (F1 shows help relevant to current screen)
-- [ ] T111 [US5] Add "Help" option to HomeScreen with keyboard shortcut (F1 or ?)
+- [x] T107 [US5] Implement HelpScreen in splitfool/ui/screens/help.py (comprehensive help content with sections for each feature)
+- [x] T108 [US5] Document all keyboard shortcuts in help screen (Ctrl+N, Ctrl+B, Ctrl+V, Ctrl+H, F1/?, Esc, Enter, Tab, Arrow keys)
+- [x] T109 [US5] Document all features with usage instructions (user management, bill entry, balances, history)
+- [x] T110 [US5] Implement context-sensitive help (F1 shows help relevant to current screen)
+- [x] T111 [US5] Add "Help" option to HomeScreen with keyboard shortcut (F1 or ?)
 
 #### Keyboard Shortcuts & Navigation
 
-- [ ] T112 [US5] Implement global keyboard shortcuts across all screens (F1 for help, Esc to go back, Tab for navigation)
-- [ ] T113 [US5] Implement screen-specific keyboard shortcuts (as defined in each screen's BINDINGS)
-- [ ] T114 [US5] Ensure all actions have keyboard alternatives (no mouse required)
-- [ ] T115 [US5] Implement focus management for form fields (Tab/Shift+Tab to navigate)
+- [x] T112 [US5] Implement global keyboard shortcuts across all screens (F1 for help, Esc to go back, Tab for navigation)
+- [x] T113 [US5] Implement screen-specific keyboard shortcuts (as defined in each screen's BINDINGS)
+- [x] T114 [US5] Ensure all actions have keyboard alternatives (no mouse required)
+- [x] T115 [US5] Implement focus management for form fields (Tab/Shift+Tab to navigate)
 
 #### Responsive Layout
 
-- [ ] T116 [US5] Implement responsive layout adapters for different terminal sizes (40x10, 80x24, 200x50)
-- [ ] T117 [US5] Test layout in small terminal (40x10) - ensure critical elements visible with scrolling
-- [ ] T118 [US5] Test layout in standard terminal (80x24) - ensure optimal layout
-- [ ] T119 [US5] Test layout in large terminal (200x50) - ensure layout uses space effectively
-- [ ] T120 [US5] Implement terminal resize handlers (gracefully handle resize events)
+- [x] T116 [US5] Implement responsive layout adapters for different terminal sizes (40x10, 80x24, 200x50)
+- [x] T117 [US5] Test layout in small terminal (40x10) - ensure critical elements visible with scrolling
+- [x] T118 [US5] Test layout in standard terminal (80x24) - ensure optimal layout
+- [x] T119 [US5] Test layout in large terminal (200x50) - ensure layout uses space effectively
+- [x] T120 [US5] Implement terminal resize handlers (gracefully handle resize events)
 
 #### Visual Polish
 
-- [ ] T121 [US5] Implement consistent color scheme across all screens (use Textual CSS)
-- [ ] T122 [US5] Implement status indicators (success/error messages, loading states)
-- [ ] T123 [US5] Implement proper focus indicators (highlight active input fields)
-- [ ] T124 [US5] Add header/footer with app version and current screen name
+- [x] T121 [US5] Implement consistent color scheme across all screens (use Textual CSS)
+- [x] T122 [US5] Implement status indicators (success/error messages, loading states)
+- [x] T123 [US5] Implement proper focus indicators (highlight active input fields)
+- [x] T124 [US5] Add header/footer with app version and current screen name
 
 #### Testing & Validation
 
