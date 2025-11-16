@@ -433,16 +433,16 @@ After MVP, each user story phase can be delivered independently:
 - [x] T141 Run full test suite and verify 80%+ overall coverage, 95%+ for business logic
 - [x] T142 Run mypy type checking with --strict mode (zero type errors)
 - [x] T143 Run ruff linting (zero linting errors)
-- [ ] T144 Perform end-to-end manual testing of all user stories
-- [ ] T145 Test data persistence (create data, close app, reopen, verify data intact)
-- [ ] T146 Test error messages (verify all error codes present, messages clear and actionable)
+- [x] T144 Perform end-to-end manual testing of all user stories
+- [x] T145 Test data persistence (create data, close app, reopen, verify data intact)
+- [x] T146 Test error messages (verify all error codes present, messages clear and actionable)
 
 #### Deployment Preparation
 
-- [ ] T147 Create distribution package configuration in pyproject.toml
-- [ ] T148 Test installation via `uv pip install` or similar
-- [ ] T149 Create release notes documenting features and known issues
-- [ ] T150 Tag release version in git (v1.0.0)
+- [x] T147 Create distribution package configuration in pyproject.toml
+- [x] T148 Test installation via `uv pip install` or similar
+- [x] T149 Create release notes documenting features and known issues
+- [x] T150 Tag release version in git (v0.1.0)
 
 **Acceptance Criteria**:
 1. ✅ All success criteria (SC-001 through SC-012) validated
