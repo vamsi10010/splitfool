@@ -1,7 +1,6 @@
 """Main Textual application."""
 
 import sqlite3
-from typing import Any
 
 from textual.app import App, ComposeResult
 from textual.widgets import Footer, Header
@@ -21,32 +20,32 @@ class SplitfoolApp(App[None]):
     Screen {
         background: $surface;
     }
-    
+
     Header {
         background: $primary;
         color: $text;
         text-style: bold;
     }
-    
+
     Footer {
         background: $primary-darken-1;
     }
-    
+
     .success {
         color: $success;
         text-style: bold;
     }
-    
+
     .error {
         color: $error;
         text-style: bold;
     }
-    
+
     .warning {
         color: $warning;
         text-style: bold;
     }
-    
+
     .info {
         color: $accent;
     }
@@ -56,7 +55,7 @@ class SplitfoolApp(App[None]):
         ("q", "quit", "Quit"),
         ("?", "help", "Help"),
     ]
-    
+
     # App title shown in header
     TITLE = "🧾 Splitfool v0.1.0"
     # Subtitle shown in header
@@ -79,18 +78,18 @@ class SplitfoolApp(App[None]):
         """Initialize application on mount."""
         # Initialize database
         initialize_database(self.config.db_path_str)
-        
+
         # Create connection
         self.conn = get_connection(self.config.db_path_str)
-        
+
         # Initialize services
         self.user_service = UserService(self.conn)
         self.bill_service = BillService(self.conn)
         self.balance_service = BalanceService(self.conn)
-        
+
         # Wire up balance service to user service
         self.user_service.set_balance_service(self.balance_service)
-        
+
         # Push home screen
         self.push_screen(HomeScreen())
 
@@ -106,7 +105,7 @@ class SplitfoolApp(App[None]):
     def action_help(self) -> None:
         """Show help screen."""
         from splitfool.ui.screens.help import HelpScreen
-        
+
         self.push_screen(HelpScreen())
 
     async def on_unmount(self) -> None:

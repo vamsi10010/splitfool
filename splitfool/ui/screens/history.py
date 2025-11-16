@@ -1,7 +1,7 @@
 """History screen for viewing past bills."""
 
 from textual.app import ComposeResult
-from textual.containers import Container, Horizontal, Vertical, VerticalScroll
+from textual.containers import Container, Horizontal, VerticalScroll
 from textual.screen import Screen
 from textual.widgets import Button, DataTable, Footer, Header, Label, Static
 
@@ -16,14 +16,14 @@ class HistoryScreen(Screen[None]):
     HistoryScreen {
         background: $surface;
     }
-    
+
     #title {
         text-style: bold;
         color: $accent;
         margin: 1;
         content-align: center middle;
     }
-    
+
     #list-container {
         width: 90%;
         height: auto;
@@ -31,13 +31,13 @@ class HistoryScreen(Screen[None]):
         border: solid $primary;
         padding: 1;
     }
-    
+
     #bill-table {
         width: 100%;
         height: auto;
         max-height: 25;
     }
-    
+
     #detail-container {
         width: 90%;
         height: auto;
@@ -45,30 +45,30 @@ class HistoryScreen(Screen[None]):
         border: solid $accent;
         padding: 1;
     }
-    
+
     #empty-message {
         width: 100%;
         content-align: center middle;
         color: $text-muted;
         padding: 2;
     }
-    
+
     .detail-section {
         margin-bottom: 1;
     }
-    
+
     .detail-label {
         text-style: bold;
         color: $accent;
     }
-    
+
     .button-row {
         width: 100%;
         height: auto;
         align: center middle;
         margin-top: 1;
     }
-    
+
     Button {
         margin: 0 1;
     }
@@ -139,7 +139,7 @@ class HistoryScreen(Screen[None]):
         assert app.user_service is not None, "UserService must be initialized"
 
         container = self.query_one("#list-container", Container)
-        
+
         # Remove old content
         try:
             old_content = container.query_one("#bill-content")
@@ -166,7 +166,7 @@ class HistoryScreen(Screen[None]):
             assert app.bill_service is not None
             payer = app.user_service.get_user(bill.payer_id)
             total = app.bill_service.calculate_total_cost(bill.id)  # type: ignore[arg-type]
-            
+
             table.add_row(
                 bill.created_at.strftime("%Y-%m-%d %H:%M"),
                 bill.description[:40] + "..." if len(bill.description) > 40 else bill.description,
@@ -237,9 +237,9 @@ class HistoryScreen(Screen[None]):
         assert app.user_service is not None, "UserService must be initialized"
 
         lines = []
-        
+
         # Bill header
-        lines.append(f"[bold cyan]Bill Details[/bold cyan]")
+        lines.append("[bold cyan]Bill Details[/bold cyan]")
         lines.append("")
         lines.append(f"[bold]Description:[/bold] {detail.bill.description}")
         lines.append(f"[bold]Date:[/bold] {detail.bill.created_at.strftime('%Y-%m-%d %H:%M')}")

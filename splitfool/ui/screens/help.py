@@ -1,10 +1,9 @@
 """Help screen with comprehensive documentation."""
 
 from textual.app import ComposeResult
-from textual.containers import Container, VerticalScroll
+from textual.containers import VerticalScroll
 from textual.screen import Screen
-from textual.widgets import Footer, Header, Label, Markdown, Static
-
+from textual.widgets import Footer, Header, Markdown
 
 HELP_CONTENT = """
 # 🧾 Splitfool Help
@@ -274,13 +273,13 @@ class HelpScreen(Screen[None]):
     HelpScreen {
         background: $surface;
     }
-    
+
     #help-container {
         width: 100%;
         height: 100%;
         padding: 1;
     }
-    
+
     Markdown {
         width: 100%;
         height: 100%;

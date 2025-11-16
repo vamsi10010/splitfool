@@ -36,13 +36,13 @@ def validate_bill_fractions(assignments: list["Assignment"]) -> None:
         ValidationError: If fractions don't sum to 1.0 for any item
     """
     item_fractions: dict[int, Decimal] = {}
-    
+
     for assignment in assignments:
         item_id = assignment.item_id
         item_fractions[item_id] = (
             item_fractions.get(item_id, Decimal("0")) + assignment.fraction
         )
-    
+
     for item_id, total in item_fractions.items():
         if abs(total - Decimal("1.0")) > Decimal("0.001"):
             raise ValidationError(

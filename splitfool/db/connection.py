@@ -31,7 +31,7 @@ def initialize_database(db_path: str) -> None:
     # Create parent directory if needed
     db_file = Path(db_path)
     db_file.parent.mkdir(parents=True, exist_ok=True)
-    
+
     # Create and initialize database
     conn = get_connection(db_path)
     try:

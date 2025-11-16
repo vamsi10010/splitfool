@@ -20,7 +20,7 @@ class ItemEntryScreen(ModalScreen[ItemData | None]):
     ItemEntryScreen {
         align: center middle;
     }
-    
+
     #dialog {
         width: 60;
         height: auto;
@@ -28,7 +28,7 @@ class ItemEntryScreen(ModalScreen[ItemData | None]):
         background: $surface;
         padding: 2;
     }
-    
+
     #title {
         width: 100%;
         content-align: center middle;
@@ -36,42 +36,42 @@ class ItemEntryScreen(ModalScreen[ItemData | None]):
         color: $accent;
         margin-bottom: 1;
     }
-    
+
     Label {
         margin-bottom: 1;
     }
-    
+
     Input {
         width: 100%;
         margin-bottom: 1;
     }
-    
+
     .user-row {
         width: 100%;
         height: auto;
         margin-bottom: 1;
     }
-    
+
     .user-checkbox {
         width: 1fr;
     }
-    
+
     .fraction-input {
         width: 20;
         margin-left: 2;
     }
-    
+
     Button {
         margin: 0 1;
     }
-    
+
     .button-row {
         width: 100%;
         height: auto;
         align: center middle;
         margin-top: 1;
     }
-    
+
     .error {
         color: $error;
         text-style: bold;
@@ -105,7 +105,7 @@ class ItemEntryScreen(ModalScreen[ItemData | None]):
             yield Label("Description:")
             description_value = self.existing_item.description if self.existing_item else ""
             yield Input(
-                placeholder="e.g., Pizza", 
+                placeholder="e.g., Pizza",
                 id="item-description",
                 value=description_value
             )
@@ -113,7 +113,7 @@ class ItemEntryScreen(ModalScreen[ItemData | None]):
             yield Label("Cost:")
             cost_value = str(self.existing_item.cost) if self.existing_item else ""
             yield Input(
-                placeholder="0.00", 
+                placeholder="0.00",
                 id="item-cost",
                 value=cost_value
             )
@@ -128,21 +128,18 @@ class ItemEntryScreen(ModalScreen[ItemData | None]):
             # Build existing assignments map for pre-filling
             existing_assignments: dict[int, Decimal] = {}
             if self.existing_item:
-                existing_assignments = {
-                    user_id: fraction 
-                    for user_id, fraction in self.existing_item.assignments
-                }
-            
+                existing_assignments = dict(self.existing_item.assignments)
+
             with Vertical(id="users-section"):
                 for user in self.users:
                     user_id_typed = user.id
                     assert user_id_typed is not None, "User ID must not be None"
-                    
+
                     with Horizontal(classes="user-row"):
                         # Pre-check if user was assigned to this item
                         is_assigned = user_id_typed in existing_assignments
                         checkbox = Checkbox(
-                            user.name, 
+                            user.name,
                             id=f"user-{user_id_typed}",
                             value=is_assigned
                         )
@@ -153,7 +150,7 @@ class ItemEntryScreen(ModalScreen[ItemData | None]):
                         fraction_value = ""
                         if user_id_typed in existing_assignments:
                             fraction_value = str(existing_assignments[user_id_typed])
-                        
+
                         fraction_input = Input(
                             placeholder="auto",
                             id=f"fraction-{user_id_typed}",

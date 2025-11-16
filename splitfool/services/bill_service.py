@@ -200,27 +200,48 @@ class BillService:
 
         Raises:
             BillNotFoundError: If bill doesn't exist
+
+        Algorithm: Proportional Tax Distribution
+        -----------------------------------------
+        Tax (tip/fees) is distributed proportionally based on each user's
+        share of the bill's item costs.
+
+        Example:
+        - Pizza $30 → Alice 100%  = $30.00
+        - Salad $15 → Bob 50%, Carol 50% = $7.50 each
+        - Tax $12
+        - Subtotal = $30 + $15 = $45
+        - Alice's share: $30/$45 × $12 = $8.00 tax
+        - Bob's share: $7.50/$45 × $12 = $2.00 tax
+        - Carol's share: $7.50/$45 × $12 = $2.00 tax
+
+        This ensures tax is distributed fairly based on actual consumption,
+        not equally among all participants.
         """
         bill = self.bill_repo.get(bill_id)
         if bill is None:
             raise BillNotFoundError(f"Bill with ID {bill_id} not found", code="BILL_001")
 
         items = self.item_repo.get_by_bill(bill_id)
-        subtotal = Decimal("0")
-        user_subtotal = Decimal("0")
+        subtotal = Decimal("0")  # Total cost of all items
+        user_subtotal = Decimal("0")  # User's portion of item costs
 
+        # Calculate user's share of item costs based on assigned fractions
         for item in items:
             subtotal += item.cost
             assignments = self.assignment_repo.get_by_item(item.id)  # type: ignore
             for assignment in assignments:
                 if assignment.user_id == user_id:
+                    # Add user's fractional share of this item
+                    # Example: $30 item × 0.5 fraction = $15 for this user
                     user_subtotal += item.cost * assignment.fraction
 
-        # Calculate proportional tax share
+        # Distribute tax proportionally based on user's share of item costs
+        # Formula: user_tax = total_tax × (user_items / total_items)
         if subtotal > Decimal("0"):
             tax_share = bill.tax * (user_subtotal / subtotal)
         else:
-            tax_share = Decimal("0")
+            tax_share = Decimal("0")  # No items means no tax
 
         return user_subtotal + tax_share
 

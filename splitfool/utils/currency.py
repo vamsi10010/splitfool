@@ -1,7 +1,6 @@
 """Currency handling utilities using Decimal for precision."""
 
-from decimal import Decimal, getcontext, ROUND_HALF_UP
-
+from decimal import ROUND_HALF_UP, Decimal, getcontext
 
 # Set global precision for currency calculations
 getcontext().prec = 10

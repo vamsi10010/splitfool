@@ -211,10 +211,10 @@ After MVP, each user story phase can be delivered independently:
 
 #### Integration & Testing
 
-- [ ] T072 [US2] Write unit tests for BillService in tests/unit/test_services.py (create_bill, calculate_user_share, calculate_total_cost, preview_bill)
-- [ ] T073 [US2] Write unit tests for bill validation logic (all validation rules with edge cases)
-- [ ] T074 [US2] Write integration test for complete bill workflow in tests/integration/test_bill_workflow.py (create bill with multiple items, various fraction splits, tax distribution)
-- [ ] T075 [US2] Write integration test for complex bill scenarios (equal split, custom fractions, single user items, tax distribution accuracy)
+- [x] T072 [US2] Write unit tests for BillService in tests/unit/test_services.py (create_bill, calculate_user_share, calculate_total_cost, preview_bill)
+- [x] T073 [US2] Write unit tests for bill validation logic (all validation rules with edge cases)
+- [x] T074 [US2] Write integration test for complete bill workflow in tests/integration/test_bill_workflow.py (create bill with multiple items, various fraction splits, tax distribution)
+- [x] T075 [US2] Write integration test for complex bill scenarios (equal split, custom fractions, single user items, tax distribution accuracy)
 - [ ] T076 [US2] Write TUI tests for BillEntryScreen using pilot mode (add items, modify assignments, preview, finalize)
 
 **Acceptance Criteria**:
@@ -266,10 +266,10 @@ After MVP, each user story phase can be delivered independently:
 
 #### Integration & Testing
 
-- [ ] T090 [US3] Write unit tests for BalanceService in tests/unit/test_services.py (get_all_balances, settlement operations)
-- [ ] T091 [US3] Write unit tests for balance calculation algorithm (netting mutual debts, multiple users, edge cases)
-- [ ] T092 [US3] Write integration test for balance calculation in tests/integration/test_balance_calculation.py (verify accuracy with complex bill scenarios)
-- [ ] T093 [US3] Write integration test for settlement workflow (settle → verify zero → verify persistence → verify bills still exist in history)
+- [x] T090 [US3] Write unit tests for BalanceService in tests/unit/test_services.py (get_all_balances, settlement operations)
+- [x] T091 [US3] Write unit tests for balance calculation algorithm (netting mutual debts, multiple users, edge cases)
+- [x] T092 [US3] Write integration test for balance calculation in tests/integration/test_balance_calculation.py (verify accuracy with complex bill scenarios)
+- [x] T093 [US3] Write integration test for settlement workflow (settle → verify zero → verify persistence → verify bills still exist in history)
 - [ ] T094 [US3] Write TUI tests for BalanceViewScreen using pilot mode (view balances, settle with confirmation)
 
 #### Update User Deletion Check
@@ -409,30 +409,30 @@ After MVP, each user story phase can be delivered independently:
 
 #### Documentation
 
-- [ ] T129 Update README.md with complete usage instructions, setup guide, and examples
-- [ ] T130 Add inline code comments for complex algorithms (balance netting, tax distribution)
+- [x] T129 Update README.md with complete usage instructions, setup guide, and examples
+- [x] T130 Add inline code comments for complex algorithms (balance netting, tax distribution)
 - [ ] T131 Generate API documentation from docstrings (optional, using Sphinx or pdoc)
 
 #### Performance Optimization
 
-- [ ] T132 Profile application startup time (target: <2 seconds per SC-004)
-- [ ] T133 Profile UI responsiveness (target: <100ms render per SC-005)
-- [ ] T134 Profile balance calculation performance (target: <5 seconds per SC-003)
-- [ ] T135 Optimize database queries (add missing indexes if needed, verify query plans)
-- [ ] T136 Test with large datasets (100 users, 1000 bills, 10k items per SC-008)
+- [x] T132 Profile application startup time (target: <2 seconds per SC-004)
+- [x] T133 Profile UI responsiveness (target: <100ms render per SC-005)
+- [x] T134 Profile balance calculation performance (target: <5 seconds per SC-003)
+- [x] T135 Optimize database queries (add missing indexes if needed, verify query plans)
+- [x] T136 Test with large datasets (100 users, 1000 bills, 10k items per SC-008)
 
 #### Error Recovery & Edge Cases
 
-- [ ] T137 Implement database corruption recovery (detect corrupted DB, offer to reinitialize per FR-037)
-- [ ] T138 Implement graceful error handling for all database errors (display user-friendly messages)
-- [ ] T139 Test and handle all documented edge cases from spec.md
-- [ ] T140 Implement input sanitization for all user inputs (prevent SQL injection via parameterized queries)
+- [x] T137 Implement database corruption recovery (detect corrupted DB, offer to reinitialize per FR-037)
+- [x] T138 Implement graceful error handling for all database errors (display user-friendly messages)
+- [x] T139 Test and handle all documented edge cases from spec.md
+- [x] T140 Implement input sanitization for all user inputs (prevent SQL injection via parameterized queries)
 
 #### Final Testing & QA
 
-- [ ] T141 Run full test suite and verify 80%+ overall coverage, 95%+ for business logic
-- [ ] T142 Run mypy type checking with --strict mode (zero type errors)
-- [ ] T143 Run ruff linting (zero linting errors)
+- [x] T141 Run full test suite and verify 80%+ overall coverage, 95%+ for business logic
+- [x] T142 Run mypy type checking with --strict mode (zero type errors)
+- [x] T143 Run ruff linting (zero linting errors)
 - [ ] T144 Perform end-to-end manual testing of all user stories
 - [ ] T145 Test data persistence (create data, close app, reopen, verify data intact)
 - [ ] T146 Test error messages (verify all error codes present, messages clear and actionable)

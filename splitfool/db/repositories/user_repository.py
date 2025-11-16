@@ -106,7 +106,7 @@ class UserRepository:
         """
         if user.id is None:
             raise ValueError("Cannot update user without ID")
-        
+
         try:
             cursor = self.conn.execute(
                 "UPDATE users SET name = ? WHERE id = ?",

@@ -67,6 +67,15 @@ ignore_missing_imports = false
 [tool.ruff]
 target-version = "py311"
 line-length = 100
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "build",
+    "dist",
+]
+
+[tool.ruff.lint]
 select = [
     "E",   # pycodestyle errors
     "W",   # pycodestyle warnings
@@ -78,13 +87,6 @@ select = [
 ]
 ignore = [
     "E501",  # line too long (handled by formatter)
-]
-exclude = [
-    ".git",
-    ".venv",
-    "__pycache__",
-    "build",
-    "dist",
 ]
 
 [tool.ruff.format]

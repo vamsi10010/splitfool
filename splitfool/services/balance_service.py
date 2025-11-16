@@ -72,7 +72,7 @@ class BalanceService:
         # Calculate debts for each bill
         for bill in bills:
             assert bill.id is not None, "Bill must have ID"
-            
+
             # Get all users involved in this bill
             items = self.item_repo.get_by_bill(bill.id)
             user_ids: set[int] = set()
@@ -88,7 +88,7 @@ class BalanceService:
                     continue
 
                 user_share = self.bill_service.calculate_user_share(bill.id, user_id)
-                
+
                 if user_share > Decimal("0"):
                     # User owes the payer
                     debt_key = (user_id, bill.payer_id)
@@ -109,32 +109,52 @@ class BalanceService:
 
         Returns:
             List of net balances with positive amounts only
+
+        Algorithm: Balance Netting
+        ---------------------------
+        This algorithm simplifies mutual debts between users. For example:
+        - If Alice owes Bob $50 and Bob owes Alice $30
+        - Result: Alice owes Bob $20 (single net balance)
+
+        Steps:
+        1. Iterate through all gross debts (debtor → creditor relationships)
+        2. For each debt, check if reverse debt exists (creditor → debtor)
+        3. Calculate net amount = forward_debt - reverse_debt
+        4. If net > $0.01: keep as forward balance (A owes B)
+        5. If net < -$0.01: keep as reverse balance (B owes A)
+        6. If |net| ≤ $0.01: discard (debts cancel out within rounding tolerance)
+        7. Mark both directions as processed to avoid duplicate processing
+
+        This reduces the number of balances users need to track and simplifies
+        settlement by eliminating circular debts.
         """
         net_balances: dict[tuple[int, int], Decimal] = {}
 
-        # Process all debt pairs
+        # Track processed pairs to avoid processing (A,B) and (B,A) separately
         processed: set[tuple[int, int]] = set()
-        
+
         for (debtor_id, creditor_id), amount in gross_debts.items():
             if (debtor_id, creditor_id) in processed:
                 continue
 
-            # Check for reverse debt
+            # Check for reverse debt (creditor owes debtor)
             reverse_debt = gross_debts.get((creditor_id, debtor_id), Decimal("0"))
 
-            # Net out the debts
+            # Net out the mutual debts
+            # Example: A owes B $50, B owes A $30 → net = $50 - $30 = $20 (A owes B)
             net_amount = amount - reverse_debt
 
-            if net_amount > Decimal("0.01"):  # Only keep if > 1 cent
+            if net_amount > Decimal("0.01"):  # Significant debt forward direction
                 net_balances[(debtor_id, creditor_id)] = net_amount
-            elif net_amount < Decimal("-0.01"):  # Reverse direction
+            elif net_amount < Decimal("-0.01"):  # Significant debt reverse direction
                 net_balances[(creditor_id, debtor_id)] = -net_amount
+            # else: debts cancel out within $0.01 tolerance, skip
 
-            # Mark both directions as processed
+            # Mark both directions as processed to prevent reprocessing
             processed.add((debtor_id, creditor_id))
             processed.add((creditor_id, debtor_id))
 
-        # Convert to Balance objects
+        # Convert to Balance objects with stable sort
         return [
             Balance(debtor_id=debtor, creditor_id=creditor, amount=amt)
             for (debtor, creditor), amt in sorted(net_balances.items())
@@ -152,7 +172,7 @@ class BalanceService:
                 - credits: list of balances where user is creditor (is owed money)
         """
         all_balances = self.get_all_balances()
-        
+
         debts = [b for b in all_balances if b.debtor_id == user_id]
         credits = [b for b in all_balances if b.creditor_id == user_id]
 

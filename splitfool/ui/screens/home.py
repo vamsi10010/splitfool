@@ -1,7 +1,7 @@
 """Home screen for main menu."""
 
 from textual.app import ComposeResult
-from textual.containers import Container, VerticalScroll
+from textual.containers import Container
 from textual.screen import Screen
 from textual.widgets import Button, Static
 
@@ -13,7 +13,7 @@ class HomeScreen(Screen[None]):
     HomeScreen {
         align: center middle;
     }
-    
+
     #menu {
         width: 60;
         height: auto;
@@ -21,7 +21,7 @@ class HomeScreen(Screen[None]):
         background: $surface;
         padding: 2;
     }
-    
+
     #title {
         width: 100%;
         content-align: center middle;
@@ -29,7 +29,7 @@ class HomeScreen(Screen[None]):
         color: $accent;
         margin-bottom: 1;
     }
-    
+
     Button {
         width: 100%;
         margin: 1;
@@ -67,7 +67,7 @@ class HomeScreen(Screen[None]):
             event: Button press event
         """
         button_id = event.button.id
-        
+
         if button_id == "btn-users":
             self.action_manage_users()
         elif button_id == "btn-bill":
@@ -88,32 +88,32 @@ class HomeScreen(Screen[None]):
 
     def action_new_bill(self) -> None:
         """Navigate to bill entry screen."""
-        from splitfool.ui.screens.bill_entry import BillEntryScreen
         from splitfool.ui.app import SplitfoolApp
-        
+        from splitfool.ui.screens.bill_entry import BillEntryScreen
+
         app = self.app
         assert isinstance(app, SplitfoolApp), "App must be SplitfoolApp"
-        
+
         # Get all users
         users = app.user_service.get_all_users()
         if not users:
             self.app.notify("No users found. Please add users first.", severity="error")
             return
-        
+
         async def handle_bill_result(saved: bool) -> None:
             if saved:
                 self.app.notify("Bill saved successfully!", severity="information")
-        
+
         self.app.push_screen(BillEntryScreen(users), handle_bill_result)
 
     def action_view_balances(self) -> None:
         """Navigate to balance view screen."""
         from splitfool.ui.screens.balance_view import BalanceViewScreen
-        
+
         self.app.push_screen(BalanceViewScreen())
 
     def action_view_history(self) -> None:
         """Navigate to history screen."""
         from splitfool.ui.screens.history import HistoryScreen
-        
+
         self.app.push_screen(HistoryScreen())

@@ -1,11 +1,10 @@
 """User management screen."""
 
 from textual.app import ComposeResult
-from textual.containers import Container, Horizontal, Vertical
+from textual.containers import Container, Horizontal
 from textual.screen import Screen
-from textual.widgets import Button, DataTable, Input, Label, Static
+from textual.widgets import Button, DataTable, Input, Static
 
-from splitfool.models.user import User
 from splitfool.utils.errors import DuplicateUserError, ValidationError
 
 
@@ -17,40 +16,40 @@ class UserManagementScreen(Screen[None]):
         layout: vertical;
         padding: 1;
     }
-    
+
     #title {
         text-style: bold;
         color: $accent;
         margin-bottom: 1;
         height: auto;
     }
-    
+
     #user-list {
         height: 30;
         margin: 1 0;
         border: solid $primary;
     }
-    
+
     #user-table {
         height: 100%;
         width: 100%;
     }
-    
+
     #form-container {
         height: 10;
         border: solid $primary;
         padding: 1;
     }
-    
+
     Input {
         width: 1fr;
         margin-right: 1;
     }
-    
+
     Button {
         margin-right: 1;
     }
-    
+
     #error-message {
         color: $error;
         margin-top: 1;
@@ -76,10 +75,10 @@ class UserManagementScreen(Screen[None]):
             Screen widgets
         """
         yield Static("👥 User Management", id="title")
-        
+
         with Container(id="user-list"):
             yield DataTable(id="user-table")
-        
+
         with Container(id="form-container"):
             with Horizontal():
                 yield Input(placeholder="Enter user name...", id="user-input")
@@ -91,39 +90,39 @@ class UserManagementScreen(Screen[None]):
     def on_mount(self) -> None:
         """Initialize screen on mount."""
         table = self.query_one("#user-table", DataTable)
-        
+
         # Only add columns if they don't exist
         if not table.columns:
             table.add_columns("ID", "Name", "Created")
-        
+
         # Set cursor and display options
         table.cursor_type = "row"
         table.zebra_stripes = True  # Alternate row colors for visibility
         table.show_cursor = True
-        
+
         self.load_users()
-        
+
         # Focus the table to ensure it's visible
         table.focus()
 
     def load_users(self) -> None:
         """Load users from database and populate table."""
         table = self.query_one("#user-table", DataTable)
-        
+
         # Clear only rows, keeping columns
         table.clear(columns=False)
-        
+
         from splitfool.ui.app import SplitfoolApp
         app = self.app
         assert isinstance(app, SplitfoolApp)
-        
+
         if app.user_service:
             users = app.user_service.get_all_users()
             self.notify(f"Loading {len(users)} users...")
             for user in users:
                 created_str = user.created_at.strftime("%Y-%m-%d %H:%M")
                 table.add_row(str(user.id), user.name, created_str, key=str(user.id))
-            
+
             # Force table to refresh and update display
             table.refresh()
             self.notify(f"✓ Loaded {table.row_count} rows")
@@ -153,17 +152,17 @@ class UserManagementScreen(Screen[None]):
         """Add a new user or update existing user if one is selected."""
         user_input = self.query_one("#user-input", Input)
         error_message = self.query_one("#error-message", Static)
-        
+
         name = user_input.value.strip()
-        
+
         if not name:
             error_message.update("⚠️ Please enter a user name")
             return
-        
+
         from splitfool.ui.app import SplitfoolApp
         app = self.app
         assert isinstance(app, SplitfoolApp)
-        
+
         try:
             if app.user_service:
                 # If a user is selected, update it; otherwise create new
@@ -203,23 +202,23 @@ class UserManagementScreen(Screen[None]):
         """Edit the selected user."""
         error_message = self.query_one("#error-message", Static)
         user_input = self.query_one("#user-input", Input)
-        
+
         if self.selected_user_id is None:
             error_message.update("⚠️ Please select a user to edit")
             return
-        
+
         from splitfool.ui.app import SplitfoolApp
         app = self.app
         assert isinstance(app, SplitfoolApp)
-        
+
         try:
             if app.user_service:
                 user = app.user_service.get_user(self.selected_user_id)
-                
+
                 # Pre-fill the input with current name
                 user_input.value = user.name
                 user_input.focus()
-                
+
                 # Update button to show we're editing
                 error_message.update(f"✏️ Editing: {user.name} (modify name and press Enter)")
         except Exception as e:
@@ -228,19 +227,19 @@ class UserManagementScreen(Screen[None]):
     def action_delete_user(self) -> None:
         """Delete the selected user with confirmation."""
         error_message = self.query_one("#error-message", Static)
-        
+
         if self.selected_user_id is None:
             error_message.update("⚠️ Please select a user to delete")
             return
-        
+
         from splitfool.ui.app import SplitfoolApp
         app = self.app
         assert isinstance(app, SplitfoolApp)
-        
+
         try:
             if app.user_service:
                 user = app.user_service.get_user(self.selected_user_id)
-                
+
                 # Show confirmation dialog
                 def check_delete(confirmed: bool) -> None:
                     """Handle delete confirmation."""
@@ -253,7 +252,7 @@ class UserManagementScreen(Screen[None]):
                             self.app.notify(f"✅ User '{user.name}' deleted")
                         except Exception as e:
                             error_message.update(f"⚠️ {str(e)}")
-                
+
                 self.app.push_screen(
                     ConfirmDeleteScreen(user.name),
                     check_delete
@@ -273,7 +272,7 @@ class ConfirmDeleteScreen(Screen[bool]):
     ConfirmDeleteScreen {
         align: center middle;
     }
-    
+
     #dialog {
         width: 50;
         height: auto;
@@ -281,13 +280,13 @@ class ConfirmDeleteScreen(Screen[bool]):
         background: $surface;
         padding: 2;
     }
-    
+
     #message {
         width: 100%;
         text-align: center;
         margin-bottom: 2;
     }
-    
+
     Button {
         width: 1fr;
         margin: 0 1;

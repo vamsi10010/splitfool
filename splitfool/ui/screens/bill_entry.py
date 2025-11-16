@@ -1,11 +1,9 @@
 """Bill entry screen for creating new bills."""
 
 from decimal import Decimal
-from typing import Any
 
-from textual import on
 from textual.app import ComposeResult
-from textual.containers import Container, Horizontal, Vertical, VerticalScroll
+from textual.containers import Container, Horizontal, VerticalScroll
 from textual.screen import Screen
 from textual.widgets import Button, Footer, Header, Input, Label, Select, Static
 
@@ -31,13 +29,13 @@ class BillEntryScreen(Screen[bool]):
     BillEntryScreen {
         background: $surface;
     }
-    
+
     #form-container {
         width: 100%;
         height: 100%;
         padding: 1;
     }
-    
+
     #bill-section {
         width: 100%;
         height: auto;
@@ -45,7 +43,7 @@ class BillEntryScreen(Screen[bool]):
         padding: 1;
         margin-bottom: 1;
     }
-    
+
     #items-section {
         width: 100%;
         height: auto;
@@ -53,7 +51,7 @@ class BillEntryScreen(Screen[bool]):
         padding: 1;
         margin-bottom: 1;
     }
-    
+
     #preview-section {
         width: 100%;
         height: auto;
@@ -61,48 +59,48 @@ class BillEntryScreen(Screen[bool]):
         padding: 1;
         margin-bottom: 1;
     }
-    
+
     Label {
         width: 100%;
         margin-bottom: 1;
     }
-    
+
     Input, Select {
         width: 100%;
         margin-bottom: 1;
     }
-    
+
     Button {
         margin: 0 1;
     }
-    
+
     .button-row {
         width: 100%;
         height: auto;
         align: center middle;
     }
-    
+
     .item-button-row {
         width: 100%;
         height: auto;
         margin-bottom: 1;
     }
-    
+
     .item-display-btn {
         width: 1fr;
         text-align: left;
     }
-    
+
     .item-action-btn {
         width: auto;
         min-width: 10;
     }
-    
+
     .error {
         color: $error;
         text-style: bold;
     }
-    
+
     .success {
         color: $success;
         text-style: bold;
@@ -207,7 +205,7 @@ class BillEntryScreen(Screen[bool]):
 
     def action_edit_item(self, index: int) -> None:
         """Edit an existing item.
-        
+
         Args:
             index: Index of item to edit
         """
@@ -215,7 +213,7 @@ class BillEntryScreen(Screen[bool]):
 
         if 0 <= index < len(self.items):
             existing_item = self.items[index]
-            
+
             def handle_edit_result(item_data: ItemData | None) -> None:
                 """Handle result from item edit screen."""
                 if item_data:
@@ -230,7 +228,7 @@ class BillEntryScreen(Screen[bool]):
 
     async def action_delete_item(self, index: int) -> None:
         """Delete an item.
-        
+
         Args:
             index: Index of item to delete
         """
@@ -299,7 +297,7 @@ class BillEntryScreen(Screen[bool]):
             app = self.app
             assert isinstance(app, SplitfoolApp), "App must be SplitfoolApp"
             assert app.bill_service is not None, "BillService must be initialized"
-            
+
             app.bill_service.create_bill(bill_input)
             self.dismiss(True)
 
@@ -317,14 +315,14 @@ class BillEntryScreen(Screen[bool]):
     async def update_items_display(self) -> None:
         """Update the items list display."""
         items_container = self.query_one("#items-section", Container)
-        
+
         # Remove old items display (but keep the section title and add button)
         try:
             old_list = items_container.query_one("#items-list")
             await old_list.remove()
         except Exception:
             pass
-        
+
         # Remove old item button rows
         for widget in items_container.query(".item-button-row"):
             await widget.remove()
@@ -350,15 +348,15 @@ class BillEntryScreen(Screen[bool]):
                 f"{i+1}. {item.description} - ${item.cost:.2f} "
                 f"(split {user_count} way{'s' if user_count != 1 else ''})"
             )
-            
+
             item_btn = Button(
-                item_text, 
+                item_text,
                 id=f"item-{i}",
                 classes="item-display-btn"
             )
             edit_btn = Button("Edit", id=f"edit-{i}", variant="warning", classes="item-action-btn")
             delete_btn = Button("Delete", id=f"delete-{i}", variant="error", classes="item-action-btn")
-            
+
             item_row = Horizontal(item_btn, edit_btn, delete_btn, classes="item-button-row")
             await items_container.mount(item_row, before=add_button_row)
 

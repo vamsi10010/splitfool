@@ -24,7 +24,7 @@ class UserService:
         """
         self.conn = connection
         self.user_repo = UserRepository(connection)
-        self._balance_service: "BalanceService | None" = None
+        self._balance_service: BalanceService | None = None
 
     def set_balance_service(self, balance_service: "BalanceService") -> None:
         """Set balance service for checking user balances.
@@ -48,13 +48,13 @@ class UserService:
             DuplicateUserError: If name already exists
         """
         validate_user_name(name)
-        
+
         user = User(
             id=None,
             name=name,
             created_at=datetime.now(),
         )
-        
+
         return self.user_repo.create(user)
 
     def get_user(self, user_id: int) -> User:
@@ -95,13 +95,13 @@ class UserService:
             DuplicateUserError: If new name already exists
         """
         validate_user_name(name)
-        
+
         # Get existing user
         user = self.user_repo.get(user_id)
-        
+
         # Update with new name
         updated_user = user.replace(name=name)
-        
+
         return self.user_repo.update(updated_user)
 
     def delete_user(self, user_id: int) -> None:
@@ -120,7 +120,7 @@ class UserService:
                 "Cannot delete user with outstanding balances",
                 code="USER_005",
             )
-        
+
         self.user_repo.delete(user_id)
 
     def user_has_balances(self, user_id: int) -> bool:
@@ -135,5 +135,5 @@ class UserService:
         if self._balance_service is None:
             # If balance service not set, allow deletion (backward compatibility)
             return False
-        
+
         return self._balance_service.user_has_outstanding_balances(user_id)

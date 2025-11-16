@@ -1,7 +1,7 @@
 """Confirmation dialog widget."""
 
 from textual.app import ComposeResult
-from textual.containers import Container, Horizontal, Vertical
+from textual.containers import Container, Horizontal
 from textual.screen import ModalScreen
 from textual.widgets import Button, Label, Static
 
@@ -13,7 +13,7 @@ class ConfirmationDialog(ModalScreen[bool]):
     ConfirmationDialog {
         align: center middle;
     }
-    
+
     #dialog {
         width: 60;
         height: auto;
@@ -21,7 +21,7 @@ class ConfirmationDialog(ModalScreen[bool]):
         border: thick $primary;
         padding: 1;
     }
-    
+
     #title {
         width: 100%;
         content-align: center middle;
@@ -29,19 +29,19 @@ class ConfirmationDialog(ModalScreen[bool]):
         color: $accent;
         margin-bottom: 1;
     }
-    
+
     #message {
         width: 100%;
         margin-bottom: 1;
         padding: 1;
     }
-    
+
     .button-row {
         width: 100%;
         height: auto;
         align: center middle;
     }
-    
+
     Button {
         margin: 0 1;
     }

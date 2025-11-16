@@ -1,7 +1,7 @@
 """Balance view screen for displaying outstanding balances."""
 
 from textual.app import ComposeResult
-from textual.containers import Container, Horizontal, Vertical, VerticalScroll
+from textual.containers import Container, Horizontal, VerticalScroll
 from textual.screen import Screen
 from textual.widgets import Button, DataTable, Footer, Header, Label, Static
 
@@ -15,14 +15,14 @@ class BalanceViewScreen(Screen[bool]):
     BalanceViewScreen {
         background: $surface;
     }
-    
+
     #title {
         text-style: bold;
         color: $accent;
         margin: 1;
         content-align: center middle;
     }
-    
+
     #balance-container {
         width: 80%;
         height: auto;
@@ -30,13 +30,13 @@ class BalanceViewScreen(Screen[bool]):
         border: solid $primary;
         padding: 1;
     }
-    
+
     #balance-table {
         width: 100%;
         height: auto;
         max-height: 30;
     }
-    
+
     #empty-message {
         width: 100%;
         content-align: center middle;
@@ -44,21 +44,21 @@ class BalanceViewScreen(Screen[bool]):
         text-style: bold;
         padding: 2;
     }
-    
+
     #settlement-info {
         width: 100%;
         margin-top: 1;
         padding: 1;
         color: $text-muted;
     }
-    
+
     .button-row {
         width: 100%;
         height: auto;
         align: center middle;
         margin-top: 1;
     }
-    
+
     Button {
         margin: 0 1;
     }
@@ -141,7 +141,7 @@ class BalanceViewScreen(Screen[bool]):
         assert app.user_service is not None, "UserService must be initialized"
 
         container = self.query_one("#balance-container", Container)
-        
+
         # Remove old content
         try:
             old_content = container.query_one("#balance-content")
@@ -157,7 +157,7 @@ class BalanceViewScreen(Screen[bool]):
                 classes="empty-message",
             )
             await container.mount(empty_msg)
-            
+
             # Disable settle button
             settle_btn = self.query_one("#settle-btn", Button)
             settle_btn.disabled = True
@@ -215,7 +215,7 @@ class BalanceViewScreen(Screen[bool]):
         from splitfool.ui.widgets.confirmation_dialog import ConfirmationDialog
 
         preview = self._format_settlement_preview()
-        
+
         def handle_confirmation(confirmed: bool) -> None:
             """Handle settlement confirmation."""
             if confirmed:
@@ -242,11 +242,11 @@ class BalanceViewScreen(Screen[bool]):
         assert app.user_service is not None, "UserService must be initialized"
 
         lines = ["The following balances will be cleared:", ""]
-        
+
         for balance in self.balances:
             debtor = app.user_service.get_user(balance.debtor_id)
             creditor = app.user_service.get_user(balance.creditor_id)
-            
+
             if debtor and creditor:
                 lines.append(f"  • {debtor.name} owes {creditor.name}: ${balance.amount:.2f}")
 
@@ -268,7 +268,7 @@ class BalanceViewScreen(Screen[bool]):
 
         try:
             # Create settlement record
-            settlement = app.balance_service.settle_all_balances(
+            app.balance_service.settle_all_balances(
                 note="Manual settlement via TUI"
             )
 

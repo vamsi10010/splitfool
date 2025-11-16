@@ -76,7 +76,7 @@ class ItemRepository:
         """
         if item.id is None:
             raise ValueError("Cannot update item without ID")
-        
+
         self.conn.execute(
             "UPDATE items SET description = ?, cost = ? WHERE id = ?",
             (item.description, float(item.cost), item.id),
