@@ -1,6 +1,6 @@
 # Splitfool
 
-A Terminal User Interface (TUI) application for splitting bills among multiple users with precise calculations and persistent storage.
+Disclaimer: vibe-coded for personal use
 
 ## Features
 
